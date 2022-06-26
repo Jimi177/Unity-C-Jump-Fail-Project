@@ -21,7 +21,6 @@ public class GameSesion : MonoBehaviour
     [SerializeField] TextMeshProUGUI failsCounter;
     public int fails;
 
-
     [Header("Player")]
     public Vector2 playerPosition;
     public bool isMoving;
@@ -29,8 +28,8 @@ public class GameSesion : MonoBehaviour
     public bool isMovingOnLadder;
 
     //Acess
-    AudioPlayer audioPlayer;
-    TimeSaver timeSaver;
+    private AudioPlayer audioPlayer;
+    private TimeSaver timeSaver;
 
     private void Awake()
     {
@@ -93,7 +92,7 @@ public class GameSesion : MonoBehaviour
         {
             timeSaver.finishTime = timePlaying;
             fails = 0;
-            elapsedTime = 0;
+            RestartTimer();
         }
     }
 

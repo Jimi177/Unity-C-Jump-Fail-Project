@@ -6,15 +6,15 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] float runSpeed;
-    [SerializeField] float jumpForce;
-    [SerializeField] float climbSpeed;
+    [SerializeField] private float runSpeed;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float climbSpeed;
 
     [Header("Input")]
-    [SerializeField] Vector2 moveInput;
+    [SerializeField] private Vector2 moveInput;
 
     //Spawn position
-    [SerializeField] Vector2 startPosition;
+    [SerializeField] private Vector2 startPosition;
 
     private float gravityScaleAtStart;
     private float gravityTurnOff = 0;
@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        AlwayesCheck();
+        CheckGround();
         PlayerPosition();
     }
 
@@ -51,16 +51,35 @@ public class PlayerMovement : MonoBehaviour
         Climb();
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Interactable")
+        {
+            OnInteractable();
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Trap")
+        {
+            OnDeath();
+        }
+
+        if (other.gameObject.tag == "Bounce")
+        {
+            OnBounce();
+        }
+    }
 
     #region Input
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
-        Debug.Log(moveInput);
     }
     void OnJump(InputValue value)
     {
-        if (value.isPressed && CheckGround())
+        if (value.isPressed && gs.isGrounded)
         {
             gs.JumpAudio();
             rb.velocity += new Vector2(rb.velocity.x, jumpForce);
@@ -70,138 +89,50 @@ public class PlayerMovement : MonoBehaviour
     #region Checks
     public void PlayerPosition()
     {
-        Vector2 playerPosition = transform.position;
-        gs.playerPosition = playerPosition;
+        gs.playerPosition = transform.position;
     }
-
     private bool CheckHasHorizontalSpeed()
     {
-        if(Mathf.Abs(rb.velocity.x) > Mathf.Epsilon)
-        {
-            gs.isMoving = true;
-            return true;
-        }
-        else
-        {
-            gs.isMoving = false;
-            return false;
-        }
+        gs.isMoving = (Mathf.Abs(rb.velocity.x) > Mathf.Epsilon);
+        return gs.isMoving;
     }    
-    private bool ChechHasVerticalSpeed()
+    private bool CheckHasVerticalSpeed()
     {
-        if (Mathf.Abs(rb.velocity.y) > Mathf.Epsilon)
-        {
-            gs.isMovingOnLadder = true;
-            return true;
-        }
-        else
-        {
-            gs.isMovingOnLadder = false;
-            return false;
-        }
+        gs.isMovingOnLadder = (Mathf.Abs(rb.velocity.y) > Mathf.Epsilon);
+        return gs.isMovingOnLadder;
     }
     private bool CheckGround()
     {
-        if (feets.IsTouchingLayers(LayerMask.GetMask("Ground")))
-        {
-            gs.isGrounded = true;
-            return true;
-        }
-        else
-        {
-            gs.isGrounded = false;
-            return false;
-        }
+        gs.isGrounded = feets.IsTouchingLayers(LayerMask.GetMask("Ground"));
+        return gs.isGrounded;
     }
     private bool CheckLadder()
     {
-        if (capsule.IsTouchingLayers(LayerMask.GetMask("Ladder")))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return capsule.IsTouchingLayers(LayerMask.GetMask("Ladder"));
     }
-    private bool CheckTrap()
-    {
-        if (capsule.IsTouchingLayers(LayerMask.GetMask("Trap")))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    private bool CheckBounce()
-    {
-        if (capsule.IsTouchingLayers(LayerMask.GetMask("Bouncing")))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    private bool CheckInteractable()
-    {
-        if (capsule.IsTouchingLayers(LayerMask.GetMask("Interactable")))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    void AlwayesCheck()
-    {
-        if (CheckTrap())
-        {
-            transform.position = startPosition;
-            gs.fails += 1;
-            gs.RestartTimer();
-            gs.FailsCounter();
-        }
 
-        if (CheckInteractable())
-        {
-            gs.LevelFinished();
-        }
-
-        if (CheckBounce())
-        {
-            gs.BounceAudio();
-        }
-
-        CheckGround();
-    }
     #endregion
     #region Movement
-    void Run()
+    private void Run()
     {
-        Vector2 playerVelocity = new Vector2(moveInput.x * runSpeed, rb.velocity.y);
-        rb.velocity = playerVelocity;
+        rb.velocity = new Vector2(moveInput.x * runSpeed, rb.velocity.y);
         anim.SetBool("isRunning", CheckHasHorizontalSpeed());
     }
-    void Flip()
+    private void Flip()
     {
         if (CheckHasHorizontalSpeed())
         {
             transform.localScale = new Vector2(Mathf.Sign(rb.velocity.x), 1f);
         }
     }
-    void Climb()
+    private void Climb()
     {
         if (CheckLadder())
         {
             Vector2 climbVelocity = new Vector2(rb.velocity.x, moveInput.y * climbSpeed);
             rb.velocity = climbVelocity;
             rb.gravityScale = gravityTurnOff;
-            anim.SetBool("isClimbing", ChechHasVerticalSpeed());
+            anim.SetBool("isClimbing", CheckHasVerticalSpeed());
             gs.LadderAudio();
         }
         else
@@ -211,4 +142,21 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     #endregion
+
+    private void OnDeath()
+    {
+        transform.position = startPosition;
+        rb.velocity = new Vector3();
+        gs.fails += 1;
+        gs.RestartTimer();
+        gs.FailsCounter();
+    }
+    private void OnInteractable()
+    {
+        gs.LevelFinished();
+    }
+    private void OnBounce()
+    {
+        gs.BounceAudio();
+    }
 }

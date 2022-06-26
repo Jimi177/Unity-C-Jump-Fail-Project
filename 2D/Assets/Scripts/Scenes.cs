@@ -7,13 +7,13 @@ using System;
 public class Scenes : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] bool isOnTriggerEnter;
-    [SerializeField] bool finishScreen;
-    [SerializeField] bool mainMenu;
-    [SerializeField] int sceneIndex;
+    [SerializeField] private bool isOnTriggerEnter;
+    [SerializeField] private bool finishScreen;
+    [SerializeField] private bool mainMenu;
+    [SerializeField] private int sceneIndex;
 
-    AudioPlayer audioPlayer;
-    GameSesion gs;
+    private AudioPlayer audioPlayer;
+    private GameSesion gs;
 
     private void Awake()
     {
@@ -59,7 +59,7 @@ public class Scenes : MonoBehaviour
         StartCoroutine(LoadScene(sceneIndex));
     }
 
-    IEnumerator LoadScene(int index)
+    private IEnumerator LoadScene(int index)
     {
         yield return new WaitForSeconds(2);
         SceneManager.LoadScene(index);
