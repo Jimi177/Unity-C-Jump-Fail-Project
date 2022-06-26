@@ -9,7 +9,8 @@ using TMPro;
 public class GameSesion : MonoBehaviour
 {
     [Header("Game On")]
-    public bool gameON = true;
+    public bool gameON;
+    public bool finishScreen = false;
 
     [Header("Timer")]
     [SerializeField] TextMeshProUGUI timeCounter;
@@ -29,25 +30,35 @@ public class GameSesion : MonoBehaviour
 
     //Acess
     AudioPlayer audioPlayer;
+    TimeSaver timeSaver;
 
     private void Awake()
     {
         audioPlayer = FindObjectOfType<AudioPlayer>();
+        timeSaver = FindObjectOfType<TimeSaver>();
     }
 
     private void Start()
     {
-        #region Start set
-        failsCounter.text = "Fails:";
-        timeCounter.text = "Time: 00:00.0";
-        gameON = true;
-        fails = 0;
-        #endregion
+        LoadStart();
     }
 
     private void Update()
     {
         UpdateTimer();
+    }
+
+    void LoadStart()
+    {
+        if(!finishScreen)
+        {
+            #region Start set
+            failsCounter.text = "Fails:";
+            timeCounter.text = "Time: 00:00.0";
+            gameON = true;
+            fails = 0;
+            #endregion
+        }
     }
 
 
@@ -78,8 +89,12 @@ public class GameSesion : MonoBehaviour
     }
     public void LevelFinished()
     {
-        fails = 0;
-        elapsedTime = 0;
+        if(gameON)
+        {
+            timeSaver.finishTime = timePlaying;
+            fails = 0;
+            elapsedTime = 0;
+        }
     }
 
     #region AudioClips
