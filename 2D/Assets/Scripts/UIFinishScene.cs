@@ -5,8 +5,8 @@ using TMPro;
 
 public class UIFinishScene : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI finishText;
-    TimeSaver timeSaver;
+    [SerializeField] private TextMeshProUGUI finishText;
+    private TimeSaver timeSaver;
 
     private void Awake()
     {

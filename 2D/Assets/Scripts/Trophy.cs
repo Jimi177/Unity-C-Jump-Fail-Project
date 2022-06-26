@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Trophy : MonoBehaviour
 {
-    public Vector3 rotationDirection;
-    public float speed;
+    [SerializeField] private Vector3 rotationDirection;
+    [SerializeField] private float speed;
 
     private void Update()
     {
