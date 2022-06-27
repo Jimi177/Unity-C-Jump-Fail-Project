@@ -20,11 +20,11 @@ public class PlayerMovement : MonoBehaviour
     private float gravityTurnOff = 0;
 
     //Acces
-    Rigidbody2D rb;
-    Animator anim;
-    CapsuleCollider2D capsule;
-    BoxCollider2D feets;
-    GameSesion gs;
+    private Rigidbody2D rb;
+    private Animator anim;
+    private CapsuleCollider2D capsule;
+    private BoxCollider2D feets;
+    private GameSesion gs;
 
 
     private void Awake()
@@ -86,6 +86,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     #endregion
+
     #region Checks
     public void PlayerPosition()
     {
@@ -112,6 +113,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     #endregion
+
     #region Movement
     private void Run()
     {
@@ -143,6 +145,7 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
+    #region OnAction
     private void OnDeath()
     {
         transform.position = startPosition;
@@ -159,4 +162,5 @@ public class PlayerMovement : MonoBehaviour
     {
         gs.BounceAudio();
     }
+    #endregion
 }

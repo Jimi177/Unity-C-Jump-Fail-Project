@@ -7,7 +7,8 @@ using TMPro;
 public class TimeSaver : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI finishTimer;
-    public TimeSpan finishTime;
+    [SerializeField] public TimeSpan finishTime;
+    [SerializeField] public string timePlayingStr;
     public static TimeSaver instance;
 
     private void Awake()

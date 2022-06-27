@@ -39,6 +39,7 @@ public class Scenes : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        //restart timer
         SceneManager.LoadScene(0);
     }
 
