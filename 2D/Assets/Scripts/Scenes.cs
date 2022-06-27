@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System;
 
 public class Scenes : MonoBehaviour
 {
@@ -12,34 +10,24 @@ public class Scenes : MonoBehaviour
     [SerializeField] private bool mainMenu;
     [SerializeField] private int sceneIndex;
 
-    private AudioPlayer audioPlayer;
-    private GameSesion gs;
-
-    private void Awake()
+    public int GetCurrentIndex()
     {
-        audioPlayer = FindObjectOfType<AudioPlayer>();
-        gs = FindObjectOfType<GameSesion>();
+        return sceneIndex;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public static void LoadFinishScene(int index)
     {
-        if (isOnTriggerEnter)
-        {
-            if (finishScreen)
-            {
-                LoadFinishScreen(sceneIndex);
-            }
+        var audioPlayer = FindObjectOfType<AudioPlayer>();
+        var gs = FindObjectOfType<GameSesion>();
 
-            if (mainMenu)
-            {
-                LoadMainMenu();
-            }
-        }
+        gs.gameON = false;
+        audioPlayer.FinishClip();
+        SceneManager.LoadScene(index);
     }
+
 
     public void LoadMainMenu()
     {
-        //restart timer
         SceneManager.LoadScene(0);
     }
 
@@ -51,18 +39,5 @@ public class Scenes : MonoBehaviour
     public void LoadLevelTwo()
     {
         SceneManager.LoadScene(2);
-    }
-
-    private void LoadFinishScreen(int sceneIndex)
-    {
-        gs.gameON = false;
-        audioPlayer.FinishClip();
-        StartCoroutine(LoadScene(sceneIndex));
-    }
-
-    private IEnumerator LoadScene(int index)
-    {
-        yield return new WaitForSeconds(2);
-        SceneManager.LoadScene(index);
     }
 }

@@ -9,6 +9,7 @@ public class TimeSaver : MonoBehaviour
     [SerializeField] TextMeshProUGUI finishTimer;
     [SerializeField] public TimeSpan finishTime;
     [SerializeField] public string timePlayingStr;
+
     public static TimeSaver instance;
 
     private void Awake()

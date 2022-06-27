@@ -54,8 +54,8 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Interactable")
-        {
-            OnInteractable();
+        {  
+            OnInteractable(other.GetComponent<Scenes>().GetCurrentIndex());
         }
     }
 
@@ -154,9 +154,9 @@ public class PlayerMovement : MonoBehaviour
         gs.RestartTimer();
         gs.FailsCounter();
     }
-    private void OnInteractable()
+    private void OnInteractable(int index)
     {
-        gs.LevelFinished();
+        gs.LevelFinished(index);
     }
     private void OnBounce()
     {

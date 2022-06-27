@@ -30,11 +30,13 @@ public class GameSesion : MonoBehaviour
     //Acess
     private AudioPlayer audioPlayer;
     private TimeSaver timeSaver;
+    private Scenes scenes;
 
     private void Awake()
     {
         audioPlayer = FindObjectOfType<AudioPlayer>();
         timeSaver = FindObjectOfType<TimeSaver>();
+        scenes = FindObjectOfType<Scenes>();
     }
 
     private void Start()
@@ -86,14 +88,14 @@ public class GameSesion : MonoBehaviour
     {
         elapsedTime = 0;
     }
-    public void LevelFinished()
+    public void LevelFinished(int levelFinishIndex)
     {
-        if(gameON)
-        {
-            timeSaver.finishTime = timePlaying;
-            fails = 0;
-            RestartTimer();
-        }
+        Debug.Log("Lvl Finished"+ levelFinishIndex + " " + "time playing:" + timePlaying);
+        gameON = false;
+        timeSaver.finishTime = timePlaying;
+        fails = 0;
+        RestartTimer();
+        Scenes.LoadFinishScene(levelFinishIndex);
     }
 
     #region AudioClips

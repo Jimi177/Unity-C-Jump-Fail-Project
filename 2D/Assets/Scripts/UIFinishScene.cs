@@ -17,4 +17,5 @@ public class UIFinishScene : MonoBehaviour
     {
         finishText.text = timeSaver.GetTime();
     }
+
 }

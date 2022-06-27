@@ -469,6 +469,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4201825035687184820, guid: 68f405d02d74bcc4d950fb0e9eb1a25b, type: 3}
+      propertyPath: m_TagString
+      value: Interactable
+      objectReference: {fileID: 0}
     - target: {fileID: 7062879099713512370, guid: 68f405d02d74bcc4d950fb0e9eb1a25b, type: 3}
       propertyPath: mainMenu
       value: 1
