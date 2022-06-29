@@ -9,7 +9,8 @@ using TMPro;
 public class GameSesion : MonoBehaviour
 {
     [Header("Game On")]
-    public bool gameON = true;
+    public bool gameON;
+    public bool finishScreen = false;
 
     [Header("Timer")]
     [SerializeField] TextMeshProUGUI timeCounter;
@@ -20,7 +21,6 @@ public class GameSesion : MonoBehaviour
     [SerializeField] TextMeshProUGUI failsCounter;
     public int fails;
 
-
     [Header("Player")]
     public Vector2 playerPosition;
     public bool isMoving;
@@ -28,26 +28,38 @@ public class GameSesion : MonoBehaviour
     public bool isMovingOnLadder;
 
     //Acess
-    AudioPlayer audioPlayer;
+    private AudioPlayer audioPlayer;
+    private TimeSaver timeSaver;
+    private Scenes scenes;
 
     private void Awake()
     {
         audioPlayer = FindObjectOfType<AudioPlayer>();
+        timeSaver = FindObjectOfType<TimeSaver>();
+        scenes = FindObjectOfType<Scenes>();
     }
 
     private void Start()
     {
-        #region Start set
-        failsCounter.text = "Fails:";
-        timeCounter.text = "Time: 00:00.0";
-        gameON = true;
-        fails = 0;
-        #endregion
+        LoadStart();
     }
 
     private void Update()
     {
         UpdateTimer();
+    }
+
+    void LoadStart()
+    {
+        if(!finishScreen)
+        {
+            #region Start set
+            failsCounter.text = "Fails:";
+            timeCounter.text = "Time: 00:00.0";
+            gameON = true;
+            fails = 0;
+            #endregion
+        }
     }
 
 
@@ -76,10 +88,14 @@ public class GameSesion : MonoBehaviour
     {
         elapsedTime = 0;
     }
-    public void LevelFinished()
+    public void LevelFinished(int levelFinishIndex)
     {
+        Debug.Log("Lvl Finished"+ levelFinishIndex + " " + "time playing:" + timePlaying);
+        gameON = false;
+        timeSaver.finishTime = timePlaying;
         fails = 0;
-        elapsedTime = 0;
+        RestartTimer();
+        Scenes.LoadFinishScene(levelFinishIndex);
     }
 
     #region AudioClips

@@ -5,39 +5,39 @@ using UnityEngine;
 public class AudioPlayer : MonoBehaviour
 {
     [Header("Running")]
-    [SerializeField] AudioClip randomStepClip;
-    [SerializeField] AudioClip[] stepClips;
-    [SerializeField] float timeBetweenSteps = 0.5f;
+    [SerializeField] private AudioClip randomStepClip;
+    [SerializeField] private AudioClip[] stepClips;
+    [SerializeField] private float timeBetweenSteps = 0.5f;
 
     [Header("Jump")]
-    [SerializeField] AudioClip jumpClip;
-    [SerializeField] [Range(0f, 1f)] float jumpVolume = 1f;
+    [SerializeField] private AudioClip jumpClip;
+    [SerializeField] [Range(0f, 1f)] private float jumpVolume = 1f;
 
     [Header("Ladder")]
-    [SerializeField] AudioClip ladderClip;
-    [SerializeField] [Range(0f, 1f)] float ladderVolume = 1f;
-    [SerializeField] float timeBetweenSounds = 0.3f;
+    [SerializeField] private AudioClip ladderClip;
+    [SerializeField] [Range(0f, 1f)] private float ladderVolume = 1f;
+    [SerializeField] private float timeBetweenSounds = 0.3f;
 
     [Header("Death")]
-    [SerializeField] AudioClip randomDeathClip;
-    [SerializeField] AudioClip[] deathClips;
-    [SerializeField] [Range(0f, 1f)] float deathVolume = 1f;
+    [SerializeField] private AudioClip randomDeathClip;
+    [SerializeField] private AudioClip[] deathClips;
+    [SerializeField] [Range(0f, 1f)] private float deathVolume = 1f;
 
     [Header("Bounce")]
-    [SerializeField] AudioClip bounceClip;
-    [SerializeField] [Range(0f, 1f)] float bounceVolume = 1f;
+    [SerializeField] private AudioClip bounceClip;
+    [SerializeField] [Range(0f, 1f)] private float bounceVolume = 1f;
 
     [Header("Finish")]
-    [SerializeField] AudioClip finishClip;
-    [SerializeField] [Range(0f, 1f)] float finishVolume = 1f;
+    [SerializeField] private AudioClip finishClip;
+    [SerializeField] [Range(0f, 1f)] private float finishVolume = 1f;
 
 
     //Timer to restart clips
-    [SerializeField] float timer;
+    [SerializeField] private float timer;
 
     //Acess
-    [SerializeField] AudioSource playerRunning;
-    GameSesion gs;
+    [SerializeField] private AudioSource playerRunning;
+    private GameSesion gs;
     
 
     private void Awake()
@@ -50,7 +50,7 @@ public class AudioPlayer : MonoBehaviour
         RunningClip();
     }
 
-    void PlayClip(AudioClip clip, float volumen)
+    private void PlayClip(AudioClip clip, float volumen)
     {
         if (clip != null)
         {
@@ -58,7 +58,7 @@ public class AudioPlayer : MonoBehaviour
         }
     }
 
-    void Timer()
+    private void Timer()
     {
         timer += Time.deltaTime;
     }
@@ -73,7 +73,7 @@ public class AudioPlayer : MonoBehaviour
             RandomRunningClip();
         }
     }
-    void RandomRunningClip()
+    private void RandomRunningClip()
     {
         randomStepClip = stepClips[Random.Range(0, stepClips.Length)];
         playerRunning.PlayOneShot(randomStepClip);
@@ -103,7 +103,7 @@ public class AudioPlayer : MonoBehaviour
         RandomDeathClip();
         PlayClip(randomDeathClip, deathVolume);
     }
-    AudioClip RandomDeathClip()
+    private AudioClip RandomDeathClip()
     {
         randomDeathClip = deathClips[Random.Range(0, deathClips.Length)];
         return randomDeathClip;
